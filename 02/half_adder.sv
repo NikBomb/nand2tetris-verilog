@@ -10,6 +10,7 @@ module half_adder(
     output sum
 );
 
-    // Put your code here
+    assign sum = a ^ b;
+    assign carry = a & b;
 
 endmodule

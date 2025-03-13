@@ -9,6 +9,18 @@ module add_16(
     output [15:0] out
 );
 
-    // Put your code here
+    wire [15:0] cout;
+    genvar i;
+    generate
+    for (i = 0; i < 16 ; i = i+1) begin : adder_inst
+        full_adder fa(
+            .a(a[i]),
+            .b(b[i]),
+            .c(i ==0 ? 1'b0 : cout[i-1]), 
+            .carry(cout[i]),
+            .sum(out[i])
+        );
+    end
+    endgenerate
     
 endmodule

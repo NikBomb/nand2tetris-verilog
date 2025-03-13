@@ -11,6 +11,7 @@ module full_adder(
     output sum
 );
 
-    // Put your code here
+    assign sum = (a ^ b) ^ c;
+    assign carry = (a & b) | (a & c) | (b & c); 
 
 endmodule
