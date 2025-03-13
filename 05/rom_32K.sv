@@ -1,7 +1,7 @@
 `define rom_32K 1
 
 module rom_32K(
-    input  [14:0]  address,
+    input  [15:0]  address,
     output [15:0] out
 );
   /* verilator lint_off UNDRIVEN */

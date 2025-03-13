@@ -1,4 +1,4 @@
-`include "./cpu_jopdorp_optimized.sv"
+`include "./cpu.sv"
 `include "rom_32K.sv"
 `include "memory.sv"
 
@@ -9,8 +9,25 @@ module computer(
     input clock
 );
 
-  // Put your code here, hint: memory uses !clock.
-  // memory must be named memory, it has integration in the verilator compile script: memory memory(...
-  // rom_32K must be named rom, it has integration in the verilator compile script: rom_32K rom(...
+  wire writeM;
+ 
+   wire [15:0] cpuValueToMemory;
+   
+   wire [15:0] pc;
+   wire [15:0] addressM;
+   wire [15:0] instruction;
+   wire [15:0] value_to_cpu;
+   
+   memory memory(cpuValueToMemory, !clock, writeM, addressM, value_to_cpu);
+   rom_32K rom(pc, instruction);
+ 
+   cpu cpu(value_to_cpu,
+     instruction,
+     reset,
+     clock,
+     cpuValueToMemory,
+     writeM,
+     addressM,
+     pc);
 
 endmodule

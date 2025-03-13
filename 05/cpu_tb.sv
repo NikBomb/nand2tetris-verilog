@@ -6,34 +6,34 @@ module cpu_tb();
     reg         reset;
     reg         clock;
     wire [15:0] outM;
-    wire        writeM;
-    wire [14:0] addressM;
-    wire [14:0] pc;
+    wire        loadM;
+    wire [15:0] addressM;
+    wire [15:0] pc;
 
-    cpu u1(inM, instruction, reset, clock, outM, writeM, addressM, pc);
+    cpu u1(inM, instruction, reset, clock, outM, loadM, addressM, pc);
 
     task assert_else_error(
             reg [15:0] exp_outM, 
-            reg exp_writeM, 
-            reg[14:0] exp_addressM, 
+            reg exp_loadM, 
+            reg[15:0] exp_addressM, 
             reg[14:0] exp_pc,
             reg[15:0] exp_d_register_out
         );
         assert (outM ==? exp_outM &&
-          writeM ==? exp_writeM &&
+          loadM ==? exp_loadM &&
           (addressM ==? exp_addressM || addressM === exp_addressM) &&
           pc ==? exp_pc &&
           (u1.d ==? exp_d_register_out ||
           u1.d === exp_d_register_out)) else begin
-            $error("clock %b, inM %b instruction %b reset %b (real exp, \noutM %b %b \nwriteM %b %b \naddressM %b %b \npc %b %b \nd_register_out %b %b \n)",
+            $error("clock %b, inM %b instruction %b reset %b (real exp, \noutM %b %b \nloadM %b %b \naddressM %b %b \npc %b %b \nd_register_out %b %b \n)",
                 clock,
                 inM, 
                 instruction, 
                 reset, 
                 outM,
                 exp_outM,
-                writeM,
-                exp_writeM,
+                loadM,
+                exp_loadM,
                 addressM,
                 exp_addressM,
                 pc,
@@ -52,11 +52,11 @@ module cpu_tb();
             reset = 0;
             #1 clock = 1;
 
-
+            // 1
             #1 clock = 0;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 12345, //addressM
                 1, //pc
                 16'bx // d_register
@@ -67,7 +67,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 12345, //addressM
                 1, //pc
                 12345 // d_register
@@ -77,7 +77,7 @@ module cpu_tb();
             #1 clock = 0;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 12345, //addressM
                 2, //pc
                 12345 // d_register
@@ -88,7 +88,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 12345, //addressM
                 2, //pc
                 12345 // d_register
@@ -98,7 +98,7 @@ module cpu_tb();
             #1 clock = 0;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 23456, //addressM
                 3, //pc
                 12345 // d_register
@@ -109,7 +109,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 23456, //addressM
                 3, //pc
                 11111 // d_register
@@ -119,7 +119,7 @@ module cpu_tb();
             #1 clock = 0;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 23456, //addressM
                 4, //pc
                 11111 // d_register
@@ -130,7 +130,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 23456, //addressM
                 4, //pc
                 11111 // d_register
@@ -140,7 +140,7 @@ module cpu_tb();
             #1 clock = 0;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 5, //pc
                 11111 // d_register
@@ -151,7 +151,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 11111,//outM
-                1, //writeM
+                1, //loadM
                 1000, //addressM
                 5, //pc
                 11111 // d_register
@@ -161,7 +161,7 @@ module cpu_tb();
             #1 clock = 0;
             #1 assert_else_error(
                 11111,//outM
-                1, //writeM
+                1, //loadM
                 1000, //addressM
                 6, //pc
                 11111 // d_register
@@ -172,7 +172,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 6, //pc
                 11111 // d_register
@@ -182,7 +182,7 @@ module cpu_tb();
             #1 clock = 0;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1001, //addressM
                 7, //pc
                 11111 // d_register
@@ -193,7 +193,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 11109,//outM
-                1, //writeM
+                1, //loadM
                 1001, //addressM
                 7, //pc
                 11110 // d_register
@@ -203,7 +203,7 @@ module cpu_tb();
             #1 clock = 0;
             #1 assert_else_error(
                 11109,//outM
-                1, //writeM
+                1, //loadM
                 1001, //addressM
                 8, //pc
                 11110 // d_register
@@ -214,7 +214,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1001, //addressM
                 8, //pc
                 11110 // d_register
@@ -224,7 +224,7 @@ module cpu_tb();
             #1 clock = 0;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 9, //pc
                 11110 // d_register
@@ -236,7 +236,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 9, //pc
                 -1 // d_register
@@ -246,7 +246,7 @@ module cpu_tb();
             #1 clock = 0;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 10, //pc
                 -1 // d_register
@@ -257,7 +257,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 10, //pc
                 -1 // d_register
@@ -267,7 +267,7 @@ module cpu_tb();
             #1 clock = 0;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 14, //addressM
                 11, //pc
                 -1 // d_register
@@ -278,7 +278,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 14, //addressM
                 11, //pc
                 -1 // d_register
@@ -288,7 +288,7 @@ module cpu_tb();
             #1 clock = 0;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 14, //addressM
                 14, //pc
                 -1 // d_register
@@ -299,7 +299,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 14, //addressM
                 14, //pc
                 -1 // d_register
@@ -309,7 +309,7 @@ module cpu_tb();
             #1 clock = 0;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 999, //addressM
                 15, //pc
                 -1 // d_register
@@ -320,7 +320,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 999, //addressM
                 15, //pc
                 -1 // d_register
@@ -330,7 +330,7 @@ module cpu_tb();
             #1 clock = 0;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 16, //pc
                 -1 // d_register
@@ -341,7 +341,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 -1,//outM
-                1, //writeM
+                1, //loadM
                 1000, //addressM
                 16, //pc
                 -1 // d_register
@@ -352,7 +352,7 @@ module cpu_tb();
             #1 clock = 0;
             #1 assert_else_error(
                 -1,//outM
-                1, //writeM
+                1, //loadM
                 1000, //addressM
                 17, //pc
                 -1 // d_register
@@ -363,7 +363,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 17, //pc
                 -1 // d_register
@@ -374,7 +374,7 @@ module cpu_tb();
             #1 clock = 0;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 21, //addressM
                 18, //pc
                 -1 // d_register
@@ -385,7 +385,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 21, //addressM
                 18, //pc
                 -1 // d_register
@@ -395,7 +395,7 @@ module cpu_tb();
             // 17
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 21, //addressM
                 21, //pc
                 -1 // d_register
@@ -406,7 +406,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 21, //addressM
                 21, //pc
                 -1 // d_register
@@ -416,7 +416,7 @@ module cpu_tb();
             #1 clock = 0;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 2, //addressM
                 22, //pc
                 -1 // d_register
@@ -427,7 +427,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 2, //addressM
                 22, //pc
                 1 // d_register
@@ -437,7 +437,7 @@ module cpu_tb();
             #1 clock = 0;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 2, //addressM
                 23, //pc
                 1 // d_register
@@ -448,7 +448,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 2, //addressM
                 23, //pc
                 1 // d_register
@@ -458,7 +458,7 @@ module cpu_tb();
             #1 clock = 0;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 24, //pc
                 1 // d_register
@@ -469,7 +469,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 24, //pc
                 -1 // d_register
@@ -481,7 +481,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 25, //pc
                 -1 // d_register
@@ -493,7 +493,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 26, //pc
                 -1 // d_register
@@ -505,7 +505,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 27, //pc
                 -1 // d_register
@@ -517,7 +517,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 28, //pc
                 -1 // d_register
@@ -529,7 +529,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 1000, //pc
                 -1 // d_register
@@ -541,7 +541,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 1000, //pc
                 -1 // d_register
@@ -553,7 +553,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 1000, //pc
                 -1 // d_register
@@ -565,7 +565,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 1000, //pc
                 0 // d_register
@@ -577,7 +577,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 1001, //pc
                 0 // d_register
@@ -589,7 +589,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 1002, //pc
                 0 // d_register
@@ -601,7 +601,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 1000, //pc
                 0 // d_register
@@ -613,7 +613,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 1000, //pc
                 0 // d_register
@@ -625,7 +625,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 1001, //pc
                 0 // d_register
@@ -637,7 +637,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 1002, //pc
                 0 // d_register
@@ -649,7 +649,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 1000, //pc
                 0 // d_register
@@ -662,7 +662,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 1000, //pc
                 1 // d_register
@@ -675,7 +675,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 1001, //pc
                 1 // d_register
@@ -687,7 +687,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 1000, //pc
                 1 // d_register
@@ -699,7 +699,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 1001, //pc
                 1 // d_register
@@ -711,7 +711,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 1000, //pc
                 1 // d_register
@@ -723,7 +723,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 1001, //pc
                 1 // d_register
@@ -735,7 +735,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 1000, //pc
                 1 // d_register
@@ -747,7 +747,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 1001, //pc
                 1 // d_register
@@ -760,7 +760,7 @@ module cpu_tb();
             #1 clock = 1;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 1000, //pc
                 1 // d_register
@@ -773,7 +773,7 @@ module cpu_tb();
             reset = 0;
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 1000, //addressM
                 0, //pc
                 1 // d_register
@@ -784,7 +784,7 @@ module cpu_tb();
             #1 instruction = 16'b0111111111111111; // D;JGE
             #1 assert_else_error(
                 16'bx,//outM
-                0, //writeM
+                0, //loadM
                 32767, //addressM
                 1, //pc
                 1 // d_register

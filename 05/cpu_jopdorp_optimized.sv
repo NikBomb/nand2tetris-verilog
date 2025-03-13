@@ -6,12 +6,12 @@ module cpu_jopdorp_optimized(
     input         reset,
     input         clock,
     output [15:0] outM,
-    output        writeM,
-    output [14:0] addressM,
-    output [14:0] pc
+    output        loadM,
+    output [15:0] addressM,
+    output [15:0] pc
 );
 
-    reg[14:0] pc = 0;
+    reg[15:0] pc = 0;
     reg[15:0] a = 0;
     reg[15:0] d = 0;
     wire alu_out_is_zero;
@@ -27,7 +27,7 @@ module cpu_jopdorp_optimized(
     wire alu_out_is_negative;
     wire less_than_zero = alu_out_is_negative;
     wire greater_than_zero = !(less_than_zero || alu_out_is_zero);
-    wire[14:0] next_pc = sel_pc ? a[14:0] : pc + 15'b1;
+    wire[15:0] next_pc = sel_pc ? a[14:0] : pc + 15'b1;
     wire[15:0] next_a = sel_a ? alu_out : {1'b0, instruction[14:0]};
     wire[15:0] next_d = alu_out;
     wire[15:0] alu_out;
@@ -52,7 +52,7 @@ module cpu_jopdorp_optimized(
     // jump logic
     assign addressM = a[14:0];
     assign outM = alu_out;
-    assign writeM = instruction[15] && instruction[3];
+    assign loadM = instruction[15] && instruction[3];
 
     always @(negedge clock)
     if (reset)

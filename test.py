@@ -120,7 +120,7 @@ def compile_and_run_simulations(project):
         compile(file, project)
     print(Fore.BLUE + "Finished compiling!\n" + Style.RESET_ALL)
     summarise_results(run_tests(project))
-    shutil.rmtree(dir_path + "/build")
+    #shutil.rmtree(dir_path + "/build")
 
 
 if __name__ == '__main__':
