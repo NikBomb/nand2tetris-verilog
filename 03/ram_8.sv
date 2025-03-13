@@ -20,6 +20,13 @@ module ram_8(
     output [15:0] out
 );
 
-    // Put your code here
+   
+  reg[15:0] memory[0:2**8-1];
+	
+  assign out = memory[address];
+	
+  always @(posedge clock) begin
+    if (load) memory[address] <= in;
+  end 
     
 endmodule

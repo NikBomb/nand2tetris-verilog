@@ -13,6 +13,11 @@ module bit_n2t(
     output out
 );
 
-    // Put your code here
+
+dff dff_inst (  
+    .in(load ? in : out), // Select input based on 'load'  
+    .clk(clk),  
+    .out(out)             // Connect output directly  
+);  
 
 endmodule

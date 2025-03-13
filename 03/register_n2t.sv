@@ -10,6 +10,16 @@ module register_n2t(
     output [15:0] out
 );
 
-    // Put your code here
+ genvar i;  
+    generate   
+        for (i = 0; i < 16; i = i + 1) begin : bit_n2t_inst  
+            bit_n2t bit_inst (  
+                .in(in[i]),   
+                .load(load),   
+                .clk(clk),   
+                .out(out[i])  
+            );  
+        end  
+    endgenerate  
 
 endmodule

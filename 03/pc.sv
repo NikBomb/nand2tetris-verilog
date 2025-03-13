@@ -1,15 +1,3 @@
-`ifndef inc_16
-    `include "../02/inc_16.sv"
-`endif
-`ifndef mux_16
-    `include "../01/mux_16.sv"
-`endif
-`ifndef or_n2t
-    `include "../01/or_n2t.sv"
-`endif
-`ifndef register_n2t
-    `include "register_n2t.sv"
-`endif
 `define pc 1
 
 module pc(
@@ -21,6 +9,20 @@ module pc(
     output [15:0] out
 );
 
-    // Put your code here
+    reg [15:0] pc_reg = 16'b0;  
+  
+    always @(posedge clk) begin  
+        if (reset) begin  
+            pc_reg <= 16'b0;  // Reset PC to 0  
+        end else if (load) begin  
+            pc_reg <= in;      // Load PC from 'in' input  
+        end else if (inc) begin  
+            pc_reg <= pc_reg + 16'b1; // Increment PC  
+        end else begin
+            pc_reg <= pc_reg;
+        end  
+    end  
+  
+    assign out = pc_reg; 
 
 endmodule
