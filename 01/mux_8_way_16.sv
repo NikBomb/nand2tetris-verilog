@@ -16,6 +16,32 @@ module mux_8_way_16(
     output [15:0] out
 );
 
-    // Put your code here
+    wire [15:0] mux_abcd_out;
+    wire [15:0] mux_efgh_out;
+
+    mux_4_way_16 mux_abcd (
+        .a(a),
+        .b(b),
+        .c(c),
+        .d(d),
+        .select(select[1:0]),
+        .out(mux_abcd_out)
+    );
+
+    mux_4_way_16 mux_efgh (
+        .a(e),
+        .b(f),
+        .c(g),
+        .d(h),
+        .select(select[1:0]),
+        .out(mux_efgh_out)
+    );
+
+    mux_16 mux_final (
+        .a(mux_abcd_out),
+        .b(mux_efgh_out),
+        .select(select[2]),
+        .out(out)
+    );
 
 endmodule

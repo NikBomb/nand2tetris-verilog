@@ -8,6 +8,6 @@ module not_16(
     output [15:0] out
 );
 
-    // Put your code here
-
+    //assign out[15:0] = ~in[15:0];
+    not_n2t not_15[15:0](.in(in[15:0]), .out(out[15:0]));
 endmodule

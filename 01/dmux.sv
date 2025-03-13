@@ -5,11 +5,13 @@
 
 module dmux(
     input  in,
-    input  select,
+    input  sel,
     output a,
     output b
 );
 
-    // Put your code here
+   assign a = (sel == 1'b0) ? in : 1'b0;
+   assign b = (sel == 1'b1) ? in : 1'b0;
+    
 
 endmodule

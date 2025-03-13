@@ -8,6 +8,6 @@ module or_8_way(
     output      out
 );
 
-    // Put your code here
+    assign out = | in;
 
 endmodule

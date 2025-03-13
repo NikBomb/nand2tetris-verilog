@@ -10,6 +10,11 @@ module mux_16(
     output [15:0] out
 );
 
-    // Put your code here
+mux u_mux[15:0] (
+  .a(a),
+  .b(b),
+  .select(select),
+  .out(out)
+);
 
 endmodule

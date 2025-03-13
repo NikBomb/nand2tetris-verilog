@@ -1,6 +1,3 @@
-`ifndef and_n2t
-  `include "and_n2t.sv"
-`endif
 `define mux 1
 
 module mux(
@@ -10,6 +7,6 @@ module mux(
     output out
 );
 
-    // Put your code here
+    assign out = (select == 1'b0) ? a : b;
 
 endmodule
