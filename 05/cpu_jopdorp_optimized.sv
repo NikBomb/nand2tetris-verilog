@@ -1,4 +1,4 @@
-`include "../02/alu_optimized.sv"
+`include "../02/alu.sv"
 
 module cpu_jopdorp_optimized(
     input  [15:0] inM,
@@ -34,7 +34,7 @@ module cpu_jopdorp_optimized(
     wire[15:0] m = inM;
 
 
-    alu_optimized calculations(
+    alu calculations(
         d, 
         am, 
         instruction[11],

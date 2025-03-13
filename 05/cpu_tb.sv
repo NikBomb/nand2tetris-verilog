@@ -1,4 +1,4 @@
-`include "cpu_jopdorp_optimized.sv"
+`include "cpu.sv"
 
 module cpu_tb();
     reg  [15:0] inM;
@@ -10,7 +10,7 @@ module cpu_tb();
     wire [14:0] addressM;
     wire [14:0] pc;
 
-    cpu_jopdorp_optimized u1(inM, instruction, reset, clock, outM, writeM, addressM, pc);
+    cpu u1(inM, instruction, reset, clock, outM, writeM, addressM, pc);
 
     task assert_else_error(
             reg [15:0] exp_outM, 

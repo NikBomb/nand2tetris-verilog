@@ -1,4 +1,4 @@
-`include "../02/alu_optimized.sv"
+`include "../02/alu.sv"
 `include "../03/pc.sv"
 `ifndef and_16
   `include "../01/and_16.sv"
